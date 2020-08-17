@@ -49,7 +49,7 @@ class MyService {
                 ).applyStyle(Style(size = Size(
                         width = 160.unitReal(),
                         height = 160.unitReal()
-                ))).applyFlex(Flex(alignSelf = AlignSelf.CENTER)),
+                ))),
 
                 Container(listOf(
                         Text(text = "Digite a idade do seu cachorro, para descobrir a idade em anos humanos.")
@@ -59,14 +59,12 @@ class MyService {
                         padding = EdgeValue(
                                 all = 20.unitReal()
                         )
-                ))
-                        .applyFlex(Flex(alignSelf = AlignSelf.CENTER)),
+                )),
 
                 TextInput(placeholder = "Digite a idade do cachorro", onChange = listOf(
                         //Armazenar o valor no contexto global do beagle
                         SetContext(contextId = "variables", path = "dogAge", value = "@{onChange.value}")
                 ))
-                        .applyFlex(Flex(alignSelf = AlignSelf.CENTER))
                         .applyStyle(style = Style(backgroundColor = "#FFFFFF",
                                 size = Size(height = 60.unitReal(), width = 60.unitPercent()),
                                 cornerRadius = CornerRadius(20.0),
@@ -74,15 +72,14 @@ class MyService {
                                         vertical = 50.unitReal()
                                 )
                 )),
-
                 Button(text = "Descobrir a idade", onPress = listOf(
                         SendRequest(url = "/calculadora/@{variables.dogAge}", method = RequestActionMethod.GET,
                                 onSuccess = listOf(
                                         Alert(title = "", message = "A idade do cachorro em anos humanos é: @{onSuccess.data} anos")),
                                 onError = listOf(
                                         Alert(title = "ERRO", message = "Erro")))
-                ))
-                    .applyStyle(Style(flex = Flex(grow = 1.0)))
-                    .applyFlex(Flex(alignContent = AlignContent.CENTER, alignItems = AlignItems.CENTER)))
+                )))
     )
+            .applyStyle(Style(flex = Flex(grow = 1.0)))
+            .applyFlex(Flex(alignContent = AlignContent.CENTER, alignItems = AlignItems.CENTER))
 }

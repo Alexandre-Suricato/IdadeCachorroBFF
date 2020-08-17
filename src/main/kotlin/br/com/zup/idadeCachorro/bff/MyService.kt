@@ -74,7 +74,7 @@ class MyService {
                     SendRequest(url = "/calculadora/@{variables.dogAge}", method = RequestActionMethod.GET,
                             onSuccess = listOf(Alert(title = "", message = "A idade do cachorro é @{onSuccess.data} anos")),
                     onError = listOf(Alert(title = "ERRO", message = "Erro")))
-    )).applyStyle()
+    ))
             .applyStyle(Style(flex = Flex(grow = 1.0)))
-            .applyFlex(Flex(alignContent = AlignContent.CENTER, alignItems = AlignItems.CENTER))
+            .applyFlex(Flex(alignContent = AlignContent.CENTER, alignItems = AlignItems.CENTER))))
 }

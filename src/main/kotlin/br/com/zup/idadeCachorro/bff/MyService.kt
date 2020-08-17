@@ -46,10 +46,15 @@ class MyService {
                         ImagePath.Local.justMobile(
                                 mobileId = "cachorro"
                         )
-                ).applyStyle(Style(size = Size(
-                        width = 160.unitReal(),
-                        height = 160.unitReal()
-                ))),
+                ).applyStyle(Style(
+                            size = Size(
+                            width = 160.unitReal(),
+                            height = 160.unitReal()
+                        ),
+                        margin = EdgeValue(
+                                vertical = 50.unitReal()
+                        )
+                )),
 
                 Container(listOf(
                         Text(text = "Digite a idade do seu cachorro, para descobrir a idade em anos humanos.")

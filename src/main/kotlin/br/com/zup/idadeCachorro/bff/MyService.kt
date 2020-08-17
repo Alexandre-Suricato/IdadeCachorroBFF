@@ -12,9 +12,13 @@ import br.com.zup.beagle.ext.unitPercent
 import br.com.zup.beagle.ext.unitReal
 import br.com.zup.beagle.ui.text
 import br.com.zup.beagle.widget.Widget
+import br.com.zup.beagle.widget.action.Alert
+import br.com.zup.beagle.widget.action.RequestActionMethod
+import br.com.zup.beagle.widget.action.SendRequest
 import br.com.zup.beagle.widget.action.SetContext
 import br.com.zup.beagle.widget.context.ContextData
 import br.com.zup.beagle.widget.context.expressionOf
+import br.com.zup.beagle.widget.context.valueOf
 import br.com.zup.beagle.widget.core.*
 import br.com.zup.beagle.widget.layout.Container
 import br.com.zup.beagle.widget.layout.Screen
@@ -25,11 +29,15 @@ import org.springframework.stereotype.Service
 @Service
 class MyService {
 
+    data class Variables(
+            val dogAge: String
+    )
+
     fun createScreen() =
             Screen(child = this.createWidget(), style = Style(backgroundColor = "#00b9d6"))
 
     fun createWidget(): Widget = Container(
-            context = ContextData(id = "context", value = DogInfo(0, false)),
+            context = ContextData(id = "variables", value = Variables(dogAge = "")),
             children = listOf(
             Image(
                     path =
@@ -50,9 +58,9 @@ class MyService {
                             )
                     ))
                     .applyFlex(Flex(alignContent = AlignContent.CENTER)),
-            TextInput(placeholder = "Digite a idade do cachorro" , type = TextInputType.NUMBER, onChange = listOf(
+            TextInput(placeholder = "Digite a idade do cachorro", onChange = listOf(
                     //Armazenar o valor no contexto global do beagle
-                    SetContext(contextId = "context", path = "age", value = "@{onChange}")
+                    SetContext(contextId = "variables", path = "dogAge", value = "@{onChange.value}")
             ))
                     .applyStyle(style = Style(backgroundColor = "#FFFFFF", size = Size(height = 120.unitReal(), width = 50.unitPercent()),
                             cornerRadius = CornerRadius(20.0),
@@ -61,12 +69,12 @@ class MyService {
                                     vertical = 50.unitReal()
                             )
                     )),
+                    Text(text = "@{variables.dogAge}"),
             Button(text = "Descobrir a idade", onPress = listOf(
-                SetContext(contextId = "context", path = "shouldPresentAge", value = true)
-            )),
-            AgeComponent(dogAge = expressionOf("@{context.age}"),
-                    shouldPresentAge = expressionOf("@{context.shouldPresentAge}"))
-    ))
+                    SendRequest(url = "/calculadora/@{variables.dogAge}", method = RequestActionMethod.GET,
+                            onSuccess = listOf(Alert(title = "", message = "A idade do cachorro é @{onSuccess.data} anos")),
+                    onError = listOf(Alert(title = "ERRO", message = "Erro")))
+    )).applyStyle()
             .applyStyle(Style(flex = Flex(grow = 1.0)))
             .applyFlex(Flex(alignContent = AlignContent.CENTER, alignItems = AlignItems.CENTER))
 }

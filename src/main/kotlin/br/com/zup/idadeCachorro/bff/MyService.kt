@@ -32,14 +32,15 @@ class MyService {
      * Armazena o valor digitado na tela nessa variável
      */
     data class Variables(
-        val dogAge: String
+        val dogAge: String,
+        val dogAgeResult: String
     )
 
     fun createScreen() =
-            Screen(child = this.createWidget(), style = Style(backgroundColor = "#9af2ff"))
+            Screen(child = this.createWidget(), style = Style(backgroundColor = "#00b9d6"))
 
     fun createWidget(): Widget = Container(
-            context = ContextData(id = "variables", value = Variables(dogAge = "0")),
+            context = ContextData(id = "variables", value = Variables(dogAge = "0", dogAgeResult = "")),
             children = listOf(
                 Image(
                         path =
@@ -77,13 +78,16 @@ class MyService {
                                         vertical = 50.unitReal()
                                 )
                 )),
-                Button(text = "Descobrir a idade" , onPress = listOf(
+                Button(text = "Descobrir a idade", styleId = "button", onPress = listOf(
                         SendRequest(url = "/calculadora/@{variables.dogAge}", method = RequestActionMethod.GET,
                                 onSuccess = listOf(
-                                        Alert(title = "", message = "A idade do cachorro em anos humanos é: @{onSuccess.data.value} anos")),
+                                        Alert(title = "", message = "A idade do cachorro em anos humanos é: @{onSuccess.data.value} anos"),
+                                SetContext(contextId = "variables", path = "dogAgeResult", value = "@{onSuccess.data.value}")),
                                 onError = listOf(
                                         Alert(title = "ERRO", message = "Erro")))
-                )))
+                )),
+                    Text(text = "@{variables.dogAgeResult}")
+            )
     )
             .applyStyle(Style(flex = Flex(grow = 1.0)))
             .applyFlex(Flex(alignContent = AlignContent.CENTER, alignItems = AlignItems.CENTER))

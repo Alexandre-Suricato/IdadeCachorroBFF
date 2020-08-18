@@ -32,14 +32,14 @@ class MyService {
      * Armazena o valor digitado na tela nessa variável
      */
     data class Variables(
-            val dogAge: String
+        val dogAge: String
     )
 
     fun createScreen() =
             Screen(child = this.createWidget(), style = Style(backgroundColor = "#9af2ff"))
 
     fun createWidget(): Widget = Container(
-            context = ContextData(id = "variables", value = Variables(dogAge = "")),
+            context = ContextData(id = "variables", value = Variables(dogAge = "0")),
             children = listOf(
                 Image(
                         path =
@@ -80,7 +80,7 @@ class MyService {
                 Button(text = "Descobrir a idade" , onPress = listOf(
                         SendRequest(url = "/calculadora/@{variables.dogAge}", method = RequestActionMethod.GET,
                                 onSuccess = listOf(
-                                        Alert(title = "", message = "A idade do cachorro em anos humanos é: @{onSuccess.data} anos")),
+                                        Alert(title = "", message = "A idade do cachorro em anos humanos é: @{onSuccess.data.value} anos")),
                                 onError = listOf(
                                         Alert(title = "ERRO", message = "Erro")))
                 )))

@@ -22,6 +22,7 @@ import br.com.zup.beagle.widget.context.valueOf
 import br.com.zup.beagle.widget.core.*
 import br.com.zup.beagle.widget.layout.Container
 import br.com.zup.beagle.widget.layout.Screen
+import br.com.zup.beagle.widget.layout.ScrollView
 import br.com.zup.beagle.widget.ui.*
 import org.springframework.stereotype.Service
 
@@ -39,9 +40,11 @@ class MyService {
     fun createScreen() =
             Screen(child = this.createWidget(), style = Style(backgroundColor = "#00b9d6"))
 
-    fun createWidget(): Widget = Container(
+    fun createWidget(): ScrollView = ScrollView(
             context = ContextData(id = "variables", value = Variables(dogAge = "0", dogAgeResult = "")),
             children = listOf(
+                    Container(
+                            listOf(
                 Image(
                         path =
                         ImagePath.Local.justMobile(
@@ -89,6 +92,8 @@ class MyService {
                     Text(text = "@{variables.dogAgeResult}")
             )
     )
-            .applyStyle(Style(flex = Flex(grow = 1.0)))
-            .applyFlex(Flex(alignContent = AlignContent.CENTER, alignItems = AlignItems.CENTER))
+                            .applyStyle(Style(flex = Flex(grow = 1.0)))
+                            .applyFlex(Flex(alignContent = AlignContent.CENTER, alignItems = AlignItems.CENTER))
+            )
+    )
 }
